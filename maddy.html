@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>babbie hehe :)</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --ink: #2b2b2b;
+    --pink: #ff5c8a;
+    --pink-soft: #ffe3ec;
+    --green: #37c871;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--bg);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .heart{
+    position:absolute;
+    color: var(--pink-soft);
+    font-size: 28px;
+    animation: float 6s ease-in-out infinite;
+    user-select:none;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  @keyframes float{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-18px) rotate(8deg); }
+  }
+
+  .card{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding: 40px 32px;
+    max-width: 420px;
+    width: 90%;
+  }
+
+  .eyebrow{
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  h1{
+    font-size: clamp(24px, 6vw, 32px);
+    color: var(--ink);
+    margin: 0 0 8px;
+    line-height: 1.25;
+    font-weight: 800;
+  }
+
+  h1 span{ color: var(--pink); }
+
+  p.sub{
+    color: #8a8a8a;
+    font-size: 15px;
+    margin: 0 0 26px;
+  }
+
+  video{
+    width: 100%;
+    max-width: 280px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 10px 24px rgba(255,92,138,0.25);
+    background: #000;
+  }
+
+  .btn-row{
+    position: relative;
+    display:flex;
+    gap: 16px;
+    justify-content:center;
+    align-items:center;
+    min-height: 64px;
+  }
+
+  button{
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 17px;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 34px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #yesBtn{
+    background: var(--green);
+    color: white;
+    box-shadow: 0 10px 24px rgba(55,200,113,0.35);
+  }
+
+  #yesBtn:hover{ transform: scale(1.06); }
+
+  #noBtn{
+    background: #fff;
+    color: var(--pink);
+    border: 2px solid var(--pink);
+    position: absolute;
+    left: 50%;
+    transform: translateX(calc(-50% + 90px));
+    transition: left 0.18s ease, top 0.18s ease;
+  }
+
+  .no-count{
+    position:absolute;
+    bottom: -30px;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    color: #c9c9c9;
+  }
+
+  .stage{ display:none; }
+  .stage.show{ display:block; animation: pop 0.4s ease; }
+
+  @keyframes pop{
+    0%{ transform: scale(0.85); opacity:0; }
+    100%{ transform: scale(1); opacity:1; }
+  }
+
+  #portalBtn{
+    background: var(--pink);
+    color: white;
+    box-shadow: 0 10px 24px rgba(255,92,138,0.35);
+    font-size: 16px;
+  }
+
+  #portalBtn:hover{ transform: scale(1.06); }
+
+  .result p{
+    color: #8a8a8a;
+    font-size: 14px;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="card stage show" id="stage1">
+  <div class="eyebrow">oy naman </div>
+
+  <video id="askVideo" autoplay loop playsinline>
+    <source src="1.mp4" type="video/mp4">
+  </video>
+
+  <h1 id="questionText">i kiss mo 'ko <span>pls </span></h1>
+  <p class="sub" id="subText">pls lang</p>
+
+  <div class="btn-row" id="btnRow">
+    <button id="yesBtn" onclick="sayYes()">sige na nga, ikaw na 'yan eh</button>
+    <button id="noBtn" onclick="dodge(event)" ontouchstart="dodge(event)">ayaw ko</button>
+    <div class="no-count" id="noCount"></div>
+  </div>
+</div>
+
+<div class="card stage" id="stage2">
+  <video id="yesVideo" playsinline>
+    <source src="yes.mp4" type="video/mp4">
+  </video>
+  <h1>tnx, mommy <span>nebe</span></h1>
+  <p class="sub" style="margin-bottom:28px;">ihhh</p>
+  <button id="portalBtn" onclick="showKiss()">click here to kiss Petit hehe</button>
+</div>
+
+<div class="card stage" id="stage3">
+  <video id="kissVideo" playsinline loop controls>
+    <source src="kiss.mp4" type="video/mp4">
+  </video>
+  <div class="result">
+    <p>salamat naman</p>
+  </div>
+</div>
+
+<script>
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const btnRow = document.getElementById('btnRow');
+  const noCountEl = document.getElementById('noCount');
+  const askVideo = document.getElementById('askVideo');
+  const questionText = document.getElementById('questionText');
+  const subText = document.getElementById('subText');
+
+  const stage1 = document.getElementById('stage1');
+  const stage2 = document.getElementById('stage2');
+  const stage3 = document.getElementById('stage3');
+
+  const TOTAL_CLIPS = 12;
+  let dodges = 0;
+
+  const questions = [
+    "bakit ayaw mo? <span>",
+    "sige na pls naman oh <span>",
+    "haha bakit naman <span>",
+    "promise ayos lang 'to <span>",
+    "grabe ka naman, prang hindi mahal <span>",
+    "pls naman, boi <span>",
+    "ge ha <span>",
+    "h'wag ka na magmatigas, haha lala naman <span>",
+    "last na 'to, sige <span>",
+    "ay <span>",
+    "ayaw mo talaga? <span>",
+    "hindi mo na siguro ako lab? <span>"
+  ];
+
+  const subLines = [
+    "g na oh, parang hini mahal",
+    "gege haha, ty n lng s lahat",
+    "oyts",
+    "sige"
+  ];
+
+  function clipForDodge(n){
+    const idx = Math.min(n, TOTAL_CLIPS);
+    return idx + '.mp4';
+  }
+
+  function tryPlayWithSound(video){
+    video.muted = false;
+    const p = video.play();
+    if(p && p.catch){
+      p.catch(() => {
+        video.muted = true;
+        video.play();
+      });
+    }
+  }
+
+  function dodge(e){
+    if(e) e.preventDefault();
+    dodges++;
+
+    askVideo.querySelector('source').src = clipForDodge(dodges);
+    askVideo.load();
+    tryPlayWithSound(askVideo);
+
+    questionText.innerHTML = questions[(dodges - 1) % questions.length];
+    subText.textContent = subLines[(dodges - 1) % subLines.length];
+
+    if(dodges >= TOTAL_CLIPS){
+      noBtn.remove();
+      noCountEl.textContent = "";
+      questionText.innerHTML = "sige na oh, kiss na <span>";
+      subText.textContent = "wala nang " + '"hindi"' + " d2, ikaw na bahala";
+      return;
+    }
+
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth;
+
+    const maxX = rowRect.width - btnW - 10;
+    const maxY = 120;
+
+    const randX = Math.random() * maxX - maxX/2;
+    const randY = (Math.random() * maxY) - maxY/2;
+
+    noBtn.style.left = `calc(50% + ${randX}px)`;
+    noBtn.style.top = `${randY}px`;
+    noBtn.style.transform = 'translateX(0)';
+
+    yesBtn.style.transform = `scale(${1 + Math.min(dodges,10)*0.03})`;
+  }
+
+  function stopVideo(video){
+    video.pause();
+    video.muted = true;
+    video.currentTime = 0;
+  }
+
+  function sayYes(){
+    stopVideo(askVideo);
+    stage1.classList.remove('show');
+    stage2.classList.add('show');
+    tryPlayWithSound(document.getElementById('yesVideo'));
+  }
+
+  function showKiss(){
+    stopVideo(document.getElementById('yesVideo'));
+    stage2.classList.remove('show');
+    stage3.classList.add('show');
+    tryPlayWithSound(document.getElementById('kissVideo'));
+  }
+
+  for(let i=0;i<14;i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = '♥';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.top = Math.random()*100 + 'vh';
+    h.style.fontSize = (18 + Math.random()*22) + 'px';
+    h.style.animationDelay = (Math.random()*4) + 's';
+    h.style.animationDuration = (4 + Math.random()*4) + 's';
+    document.body.appendChild(h);
+  }
+</script>
+
+</body>
+</html>
+
